@@ -2,6 +2,7 @@ import Head from 'next/head'
 import Image from 'next/image'
 import styles from '@/styles/Home.module.css'
 import { useEffect, useState } from "react"
+import Card from "@/components/Card"
 
 export default function Home() {
   const [expansion, setExpansion] = useState('')
@@ -67,13 +68,18 @@ export default function Home() {
         <button onClick={getNumbers}>Get cards</button>
         {isLoaded === false && <p>Loading...</p>}
         {isLoaded && (
-          <div>
+          <div className={styles.cards}>
             {cards.map((card, index) => {
               return (
                 <>
-                  <img width={200} src={card.data.images.small} key={index} />
+                  <Card
+                    src={card.data.images.small}
+                    name={card.data.name}
+                    price={card.data.tcgplayer.prices.holofoil ? card.data.tcgplayer.prices.holofoil.market : card.data.tcgplayer.prices.normal.market}
+                  />
+                  {/* <img width={200} src={card.data.images.small} key={index} alt={card.data.name} />
                   <p>{card.data.name}</p>
-                  <p>{card.data.tcgplayer.prices.holofoil ? card.data.tcgplayer.prices.holofoil.market : card.data.tcgplayer.prices.normal.market}</p>
+                  <p>{card.data.tcgplayer.prices.holofoil ? card.data.tcgplayer.prices.holofoil.market : card.data.tcgplayer.prices.normal.market}</p> */}
                 </>
               );
             })}
