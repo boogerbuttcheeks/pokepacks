@@ -64,6 +64,7 @@ export default function Home() {
       </> : <></>}
 
       {expansion !== '' ? <>
+        <button onClick={() => { setExpansion('') }}>Back</button>
         <h1>{expansion}</h1>
         <button onClick={getNumbers}>Get cards</button>
         {isLoaded === false && <p>Loading...</p>}
