@@ -21,8 +21,10 @@ export default function Home() {
         <button onClick={() => { setExpansionSelected('evs') }}>Evolving Skies</button>
       </main> : <></>}
 
-      <main className={styles.main}>
-      </main>
+      {expansionSelected === '' ? <></> : <main className={styles.main}>
+        <button onClick={() => { setExpansionSelected('') }}>Back</button>
+        <h1>Test</h1>
+      </main>}
     </>
   )
 }
