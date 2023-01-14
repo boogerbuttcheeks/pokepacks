@@ -1,8 +1,11 @@
 import Head from 'next/head'
 import Image from 'next/image'
 import styles from '@/styles/Home.module.css'
+import { useState } from "react"
 
 export default function Home() {
+  const [expansionSelected, setExpansionSelected] = useState('')
+
   return (
     <>
       <Head>
@@ -11,6 +14,12 @@ export default function Home() {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
+
+      {expansionSelected === '' ? <main className={styles.main}>
+        <h1>Select a set to open</h1>
+        <button onClick={() => { setExpansionSelected('cel') }}>Celebrations</button>
+        <button onClick={() => { setExpansionSelected('evs') }}>Evolving Skies</button>
+      </main> : <></>}
 
       <main className={styles.main}>
       </main>
