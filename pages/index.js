@@ -6,21 +6,61 @@ import Card from "@/components/Card"
 
 export default function Home() {
   const [expansion, setExpansion] = useState('')
-  const [cards, setCards] = useState();
+  const [cards, setCards] = useState([{}]);
   const [isLoaded, setIsLoaded] = useState(null);
 
   async function getCards(arr) {
     await Promise.all([
-      fetch(`https://api.pokemontcg.io/v2/cards/${expansion.id}-${arr[0]}`),
-      fetch(`https://api.pokemontcg.io/v2/cards/${expansion.id}-${arr[1]}`),
-      fetch(`https://api.pokemontcg.io/v2/cards/${expansion.id}-${arr[2]}`),
-      fetch(`https://api.pokemontcg.io/v2/cards/${expansion.id}-${arr[3]}`),
-      fetch(`https://api.pokemontcg.io/v2/cards/${expansion.id}-${arr[4]}`),
-      fetch(`https://api.pokemontcg.io/v2/cards/${expansion.id}-${arr[5]}`),
-      fetch(`https://api.pokemontcg.io/v2/cards/${expansion.id}-${arr[6]}`),
-      fetch(`https://api.pokemontcg.io/v2/cards/${expansion.id}-${arr[7]}`),
-      fetch(`https://api.pokemontcg.io/v2/cards/${expansion.id}-${arr[8]}`),
-      fetch(`https://api.pokemontcg.io/v2/cards/${expansion.id}-${arr[9]}`),
+      fetch(`https://api.pokemontcg.io/v2/cards/${expansion.id}-${arr[0]}`, {
+        headers: {
+          'X-API-KEY': 'a4f8541e-14df-4ca7-b1af-ce5c12f0a7cc'
+        }
+      }),
+      fetch(`https://api.pokemontcg.io/v2/cards/${expansion.id}-${arr[1]}`, {
+        headers: {
+          'X-API-KEY': 'a4f8541e-14df-4ca7-b1af-ce5c12f0a7cc'
+        }
+      }),
+      fetch(`https://api.pokemontcg.io/v2/cards/${expansion.id}-${arr[2]}`, {
+        headers: {
+          'X-API-KEY': 'a4f8541e-14df-4ca7-b1af-ce5c12f0a7cc'
+        }
+      }),
+      fetch(`https://api.pokemontcg.io/v2/cards/${expansion.id}-${arr[3]}`, {
+        headers: {
+          'X-API-KEY': 'a4f8541e-14df-4ca7-b1af-ce5c12f0a7cc'
+        }
+      }),
+      fetch(`https://api.pokemontcg.io/v2/cards/${expansion.id}-${arr[4]}`, {
+        headers: {
+          'X-API-KEY': 'a4f8541e-14df-4ca7-b1af-ce5c12f0a7cc'
+        }
+      }),
+      fetch(`https://api.pokemontcg.io/v2/cards/${expansion.id}-${arr[5]}`, {
+        headers: {
+          'X-API-KEY': 'a4f8541e-14df-4ca7-b1af-ce5c12f0a7cc'
+        }
+      }),
+      fetch(`https://api.pokemontcg.io/v2/cards/${expansion.id}-${arr[6]}`, {
+        headers: {
+          'X-API-KEY': 'a4f8541e-14df-4ca7-b1af-ce5c12f0a7cc'
+        }
+      }),
+      fetch(`https://api.pokemontcg.io/v2/cards/${expansion.id}-${arr[7]}`, {
+        headers: {
+          'X-API-KEY': 'a4f8541e-14df-4ca7-b1af-ce5c12f0a7cc'
+        }
+      }),
+      fetch(`https://api.pokemontcg.io/v2/cards/${expansion.id}-${arr[8]}`, {
+        headers: {
+          'X-API-KEY': 'a4f8541e-14df-4ca7-b1af-ce5c12f0a7cc'
+        }
+      }),
+      fetch(`https://api.pokemontcg.io/v2/cards/${expansion.id}-${arr[9]}`, {
+        headers: {
+          'X-API-KEY': 'a4f8541e-14df-4ca7-b1af-ce5c12f0a7cc'
+        }
+      }),
     ])
       .then(function (responses) {
         // Get a JSON object from each of the responses
@@ -58,7 +98,11 @@ export default function Home() {
   }
 
   function getSet(expansionId) {
-    fetch(`https://api.pokemontcg.io/v2/sets/${expansionId}`)
+    fetch(`https://api.pokemontcg.io/v2/sets/${expansionId}`, {
+      headers: {
+        'X-API-KEY': 'a4f8541e-14df-4ca7-b1af-ce5c12f0a7cc'
+      }
+    })
       .then((responses) => {
         return responses.json()
       })
@@ -81,18 +125,17 @@ export default function Home() {
       {expansion !== '' ? <>
         <button onClick={() => { setExpansion('') }}>Back</button>
         <h1>{expansion.name}</h1>
-        <h1>{expansion.total}</h1>
         <button onClick={getNumbers}>Get cards</button>
         {isLoaded === false && <p>Loading...</p>}
         {isLoaded && (
           <div className={styles.cards}>
-            {cards.map((card, index) => {
+            {cards.map((card) => {
               return (
                 <>
                   <Card
-                    src={card.data.images.small}
                     name={card.data.name}
                     price={card.data.tcgplayer.prices.holofoil ? card.data.tcgplayer.prices.holofoil.market : card.data.tcgplayer.prices.normal.market}
+                    src={card.data.images.small}
                   />
                 </>
               );
