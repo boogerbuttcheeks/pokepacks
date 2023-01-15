@@ -3,8 +3,16 @@ import Image from 'next/image'
 import styles from '@/styles/Home.module.css'
 import { useEffect, useState } from "react"
 import Card from "@/components/Card"
+import useSWR from 'swr'
+
+//Write a fetcher function to wrap the native fetch function and return the result of a call to url in json format
+const fetcher = (url) => fetch(url).then((res) => res.json());
 
 export default function Home() {
+  //Set up SWR to run the fetcher function when calling "/api/staticdata"
+  //There are 3 possible states: (1) loading when data is null (2) ready when the data is returned (3) error when there was an error fetching the data
+  const { data, error } = useSWR('/api/staticdata', fetcher);
+
   const [expansion, setExpansion] = useState('')
   const [cards, setCards] = useState([{}]);
   const [isLoaded, setIsLoaded] = useState(null);
@@ -14,7 +22,8 @@ export default function Home() {
   useEffect(() => {
     console.log('useEffectRan')
     if (value > highestValuePack) {
-      setHighestValuePack(value)
+      setHighestValuePack(value.toFixed(2))
+      console.log('New best pack!')
     }
   }, [value, highestValuePack])
 
@@ -104,14 +113,44 @@ export default function Home() {
 
   function getNumbers() {
     setIsLoaded(false)
+
     let arr = []
-    let numberOfCards = expansion.total
-    // Get 10 unique numbers in range 1 to n
-    while (arr.length < 10) {
-      let r = Math.floor(Math.random() * numberOfCards) + 1
-      if (arr.indexOf(r) === -1) arr.push(r)
+    let x = JSON.parse(data)
+
+    // Get 6 commons
+    let common = x[`${expansion.id}`][`common`]
+    let commonArr = []
+    while (commonArr.length < 6) {
+      let r = Math.floor(Math.random() * common.length) + 1
+      if (commonArr.indexOf(r) === -1) commonArr.push(common[r])
     }
-    // console.log(arr);
+    for (let i in commonArr) {
+      arr.push(commonArr[i])
+    }
+
+    // Get 3 uncommons
+    let uncommon = x[`${expansion.id}`][`uncommon`]
+    let uncommonArr = []
+    while (uncommonArr.length < 3) {
+      let r = Math.floor(Math.random() * uncommon.length) + 1
+      if (uncommonArr.indexOf(r) === -1) uncommonArr.push(uncommon[r])
+    }
+    for (let i in uncommonArr) {
+      arr.push(uncommonArr[i])
+    }
+
+    // Get 1 vmax alt art for example
+    let vmaxalt = x[`${expansion.id}`][`vmaxalt`]
+    let vmaxaltArr = []
+    while (vmaxaltArr.length < 1) {
+      let r = Math.floor(Math.random() * vmaxalt.length) + 1
+      if (vmaxaltArr.indexOf(r) === -1) vmaxaltArr.push(vmaxalt[r])
+    }
+    for (let i in vmaxaltArr) {
+      arr.push(vmaxaltArr[i])
+    }
+
+    console.log(arr)
     getCards(arr);
   }
 
@@ -132,6 +171,8 @@ export default function Home() {
       })
   }
 
+  if (error) return <div>Failed to load</div>;
+
   return (
     <div className="App">
       {expansion === '' ? <>
@@ -145,8 +186,9 @@ export default function Home() {
         <h1>{expansion.name}</h1>
         <button onClick={getNumbers}>Open pack</button>
         {isLoaded === false && <p>Loading...</p>}
-        {highestValuePack === 0 ? <></> : <p>Highest value pack: {highestValuePack}</p>}
-        <p>Pack value: {value.toFixed(2)}</p>
+        {highestValuePack === 0 ? <></> : <p>Highest value pack: ${highestValuePack} USD</p>}
+        <p>Pack value: ${value.toFixed(2)} USD</p>
+        <h1>{data['record']}</h1>
         {isLoaded && (
           <div className={styles.cards}>
             {cards.map((card) => {
