@@ -20,10 +20,10 @@ export default function Home() {
   const [highestValuePack, setHighestValuePack] = useState(0)
 
   useEffect(() => {
-    console.log('useEffectRan')
+    // console.log('useEffectRan')
     if (value > highestValuePack) {
       setHighestValuePack(value.toFixed(2))
-      console.log('New best pack!')
+      // console.log('New best pack!')
     }
   }, [value, highestValuePack])
 
@@ -117,37 +117,88 @@ export default function Home() {
     let arr = []
     let x = JSON.parse(data)
 
-    // Get 6 commons
     let common = x[`${expansion.id}`][`common`]
     let commonArr = []
+    let uncommon = x[`${expansion.id}`][`uncommon`]
+    let uncommonArr = []
+
+    let nonholo = x[`${expansion.id}`][`nonholo`]
+    let holo = x[`${expansion.id}`][`holo`]
+    let v = x[`${expansion.id}`][`v`]
+    let vmax = x[`${expansion.id}`][`vmax`]
+    let vfa = x[`${expansion.id}`][`vfa`]
+    let trainer = x[`${expansion.id}`][`trainer`]
+    let gold = x[`${expansion.id}`][`gold`]
+    let rainbow = x[`${expansion.id}`][`rainbow`]
+    let valt = x[`${expansion.id}`][`valt`]
+    let vmaxalt = x[`${expansion.id}`][`vmaxalt`]
+
+    // Get 6 commons
     while (commonArr.length < 6) {
-      let r = Math.floor(Math.random() * common.length) + 1
+      let r = Math.floor(Math.random() * common.length)
       if (commonArr.indexOf(r) === -1) commonArr.push(common[r])
+      console.log(common)
+      console.log(r)
+      console.log(common[r])
     }
     for (let i in commonArr) {
       arr.push(commonArr[i])
     }
 
     // Get 3 uncommons
-    let uncommon = x[`${expansion.id}`][`uncommon`]
-    let uncommonArr = []
     while (uncommonArr.length < 3) {
-      let r = Math.floor(Math.random() * uncommon.length) + 1
+      let r = Math.floor(Math.random() * uncommon.length)
       if (uncommonArr.indexOf(r) === -1) uncommonArr.push(uncommon[r])
+      console.log(uncommon)
+      console.log(r)
+      console.log(uncommon[r])
     }
     for (let i in uncommonArr) {
       arr.push(uncommonArr[i])
     }
 
     // Get 1 vmax alt art for example
-    let vmaxalt = x[`${expansion.id}`][`vmaxalt`]
-    let vmaxaltArr = []
-    while (vmaxaltArr.length < 1) {
-      let r = Math.floor(Math.random() * vmaxalt.length) + 1
-      if (vmaxaltArr.indexOf(r) === -1) vmaxaltArr.push(vmaxalt[r])
-    }
-    for (let i in vmaxaltArr) {
-      arr.push(vmaxaltArr[i])
+    // let vmaxalt = x[`${expansion.id}`][`vmaxalt`]
+    // let vmaxaltArr = []
+    // while (vmaxaltArr.length < 1) {
+    //   let r = Math.floor(Math.random() * vmaxalt.length)
+    //   if (vmaxaltArr.indexOf(r) === -1) vmaxaltArr.push(vmaxalt[r])
+    // }
+    // for (let i in vmaxaltArr) {
+    //   arr.push(vmaxaltArr[i])
+    // }
+
+    let hitNum = (Math.random()).toFixed(2) * 100
+    if (hitNum <= 22) {
+      let r = Math.floor(Math.random() * nonholo.length)
+      arr.push(nonholo[r])
+    } else if (hitNum <= 43) {
+      let r = Math.floor(Math.random() * holo.length)
+      arr.push(holo[r])
+    } else if (hitNum <= 58) {
+      let r = Math.floor(Math.random() * v.length)
+      arr.push(v[r])
+    } else if (hitNum <= 68) {
+      let r = Math.floor(Math.random() * vmax.length)
+      arr.push(vmax[r])
+    } else if (hitNum <= 76) {
+      let r = Math.floor(Math.random() * vfa.length)
+      arr.push(vfa[r])
+    } else if (hitNum <= 84) {
+      let r = Math.floor(Math.random() * trainer.length)
+      arr.push(trainer[r])
+    } else if (hitNum <= 89) {
+      let r = Math.floor(Math.random() * gold.length)
+      arr.push(gold[r])
+    } else if (hitNum <= 94) {
+      let r = Math.floor(Math.random() * rainbow.length)
+      arr.push(rainbow[r])
+    } else if (hitNum <= 98) {
+      let r = Math.floor(Math.random() * valt.length)
+      arr.push(valt[r])
+    } else {
+      let r = Math.floor(Math.random() * vmaxalt.length)
+      arr.push(vmaxalt[r])
     }
 
     console.log(arr)
