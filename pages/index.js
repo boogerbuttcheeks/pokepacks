@@ -8,6 +8,15 @@ export default function Home() {
   const [expansion, setExpansion] = useState('')
   const [cards, setCards] = useState([{}]);
   const [isLoaded, setIsLoaded] = useState(null);
+  const [value, setValue] = useState(0)
+  const [highestValuePack, setHighestValuePack] = useState(0)
+
+  useEffect(() => {
+    console.log('useEffectRan')
+    if (value > highestValuePack) {
+      setHighestValuePack(value)
+    }
+  }, [value, highestValuePack])
 
   async function getCards(arr) {
     await Promise.all([
@@ -71,10 +80,20 @@ export default function Home() {
         );
       })
       .then(function (data) {
-        // Log the data to the console
-        // You would do something with both sets of data here
-        console.log(data);
+        let currentValue = 0
         setCards(data);
+        // TCGPlayer gives different prices based on if holofoil, reverse foil, or normal
+        // Only focusing on holofoil or not right now
+        for (let i = 0; i < data.length; i++) {
+          if (data[i].data.tcgplayer.prices.holofoil) {
+            let priceOfCard = data[i].data.tcgplayer.prices.holofoil.market
+            currentValue += parseFloat(priceOfCard)
+          } else {
+            let priceOfCard = data[i].data.tcgplayer.prices.normal.market
+            currentValue += parseFloat(priceOfCard)
+          }
+        }
+        setValue(currentValue)
         setIsLoaded(true);
       })
       .catch(function (error) {
@@ -86,14 +105,13 @@ export default function Home() {
   function getNumbers() {
     setIsLoaded(false)
     let arr = []
-    console.log(expansion.total)
     let numberOfCards = expansion.total
     // Get 10 unique numbers in range 1 to n
     while (arr.length < 10) {
       let r = Math.floor(Math.random() * numberOfCards) + 1
       if (arr.indexOf(r) === -1) arr.push(r)
     }
-    console.log(arr);
+    // console.log(arr);
     getCards(arr);
   }
 
@@ -125,8 +143,10 @@ export default function Home() {
       {expansion !== '' ? <>
         <button onClick={() => { setExpansion('') }}>Back</button>
         <h1>{expansion.name}</h1>
-        <button onClick={getNumbers}>Get cards</button>
+        <button onClick={getNumbers}>Open pack</button>
         {isLoaded === false && <p>Loading...</p>}
+        {highestValuePack === 0 ? <></> : <p>Highest value pack: {highestValuePack}</p>}
+        <p>Pack value: {value.toFixed(2)}</p>
         {isLoaded && (
           <div className={styles.cards}>
             {cards.map((card) => {
