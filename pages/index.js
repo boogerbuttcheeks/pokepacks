@@ -18,12 +18,14 @@ export default function Home() {
   const [isLoaded, setIsLoaded] = useState(null);
   const [value, setValue] = useState(0)
   const [highestValuePack, setHighestValuePack] = useState(0)
+  const [isModalVisible, setIsModalVisible] = useState(false)
+  const [modalSrc, setModalSrc] = useState()
 
   useEffect(() => {
     // console.log('useEffectRan')
     if (value > highestValuePack) {
       setHighestValuePack(value.toFixed(2))
-      // console.log('New best pack!')
+      console.log('New best pack!')
     }
   }, [value, highestValuePack])
 
@@ -137,9 +139,9 @@ export default function Home() {
     while (commonArr.length < 6) {
       let r = Math.floor(Math.random() * common.length)
       if (commonArr.indexOf(r) === -1) commonArr.push(common[r])
-      console.log(common)
-      console.log(r)
-      console.log(common[r])
+      // console.log(common)
+      // console.log(r)
+      // console.log(common[r])
     }
     for (let i in commonArr) {
       arr.push(commonArr[i])
@@ -149,24 +151,13 @@ export default function Home() {
     while (uncommonArr.length < 3) {
       let r = Math.floor(Math.random() * uncommon.length)
       if (uncommonArr.indexOf(r) === -1) uncommonArr.push(uncommon[r])
-      console.log(uncommon)
-      console.log(r)
-      console.log(uncommon[r])
+      // console.log(uncommon)
+      // console.log(r)
+      // console.log(uncommon[r])
     }
     for (let i in uncommonArr) {
       arr.push(uncommonArr[i])
     }
-
-    // Get 1 vmax alt art for example
-    // let vmaxalt = x[`${expansion.id}`][`vmaxalt`]
-    // let vmaxaltArr = []
-    // while (vmaxaltArr.length < 1) {
-    //   let r = Math.floor(Math.random() * vmaxalt.length)
-    //   if (vmaxaltArr.indexOf(r) === -1) vmaxaltArr.push(vmaxalt[r])
-    // }
-    // for (let i in vmaxaltArr) {
-    //   arr.push(vmaxaltArr[i])
-    // }
 
     let hitNum = (Math.random()).toFixed(2) * 100
     if (hitNum <= 22) {
@@ -201,7 +192,7 @@ export default function Home() {
       arr.push(vmaxalt[r])
     }
 
-    console.log(arr)
+    // console.log(arr)
     getCards(arr);
   }
 
@@ -222,6 +213,13 @@ export default function Home() {
       })
   }
 
+  function showModal(src) {
+    setIsModalVisible(true)
+    setModalSrc(src)
+    return <>
+    </>
+  }
+
   if (error) return <div>Failed to load</div>;
 
   return (
@@ -231,6 +229,14 @@ export default function Home() {
         <button onClick={() => { getSet('swsh8') }}>Fusion Strike</button>
         <button onClick={() => { getSet('swsh7') }}>Evolving Skies</button>
       </> : <></>}
+
+      {isModalVisible ? <div
+        className={styles.modalWrapper}
+        onClick={() => { setIsModalVisible(false) }}>
+        <div className={styles.modal}>
+          <img src={modalSrc} alt='test' />
+        </div>
+      </div> : <></>}
 
       {expansion !== '' ? <>
         <button onClick={() => { setExpansion('') }}>Back</button>
@@ -249,6 +255,8 @@ export default function Home() {
                     name={card.data.name}
                     price={card.data.tcgplayer.prices.holofoil ? card.data.tcgplayer.prices.holofoil.market : card.data.tcgplayer.prices.normal.market}
                     src={card.data.images.small}
+                    largeSrc={card.data.images.large}
+                    handleClick={showModal}
                   />
                 </>
               );

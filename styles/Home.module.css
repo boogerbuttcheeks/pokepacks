@@ -3,3 +3,18 @@
   flex-wrap: wrap;
   justify-content: first;
 }
+
+.modalWrapper {
+  position: fixed;
+  width: 100vw;
+  height: 100vh;
+  display: grid;
+  place-content: center;
+  background: rgba(0, 0, 0, 0.3);
+  backdrop-filter: blur(1px);
+}
+
+.modal {
+  padding: 1rem;
+  max-width: 420px;
+}
