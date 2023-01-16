@@ -20,6 +20,7 @@ export default function Home() {
   const [highestValuePack, setHighestValuePack] = useState(0)
   const [isModalVisible, setIsModalVisible] = useState(false)
   const [modalSrc, setModalSrc] = useState()
+  const [modalAlt, setModalAlt] = useState()
 
   useEffect(() => {
     // console.log('useEffectRan')
@@ -31,6 +32,17 @@ export default function Home() {
 
   async function getCards(arr) {
     await Promise.all([
+      // Ordered so the first two cards are the hit + reverse
+      fetch(`https://api.pokemontcg.io/v2/cards/${expansion.id}-${arr[9]}`, {
+        headers: {
+          'X-API-KEY': 'a4f8541e-14df-4ca7-b1af-ce5c12f0a7cc'
+        }
+      }),
+      fetch(`https://api.pokemontcg.io/v2/cards/${expansion.id}-${arr[8]}`, {
+        headers: {
+          'X-API-KEY': 'a4f8541e-14df-4ca7-b1af-ce5c12f0a7cc'
+        }
+      }),
       fetch(`https://api.pokemontcg.io/v2/cards/${expansion.id}-${arr[0]}`, {
         headers: {
           'X-API-KEY': 'a4f8541e-14df-4ca7-b1af-ce5c12f0a7cc'
@@ -67,16 +79,6 @@ export default function Home() {
         }
       }),
       fetch(`https://api.pokemontcg.io/v2/cards/${expansion.id}-${arr[7]}`, {
-        headers: {
-          'X-API-KEY': 'a4f8541e-14df-4ca7-b1af-ce5c12f0a7cc'
-        }
-      }),
-      fetch(`https://api.pokemontcg.io/v2/cards/${expansion.id}-${arr[8]}`, {
-        headers: {
-          'X-API-KEY': 'a4f8541e-14df-4ca7-b1af-ce5c12f0a7cc'
-        }
-      }),
-      fetch(`https://api.pokemontcg.io/v2/cards/${expansion.id}-${arr[9]}`, {
         headers: {
           'X-API-KEY': 'a4f8541e-14df-4ca7-b1af-ce5c12f0a7cc'
         }
@@ -213,9 +215,10 @@ export default function Home() {
       })
   }
 
-  function showModal(src) {
+  function showModal(src, name) {
     setIsModalVisible(true)
     setModalSrc(src)
+    setModalAlt(name)
     return <>
     </>
   }
@@ -234,7 +237,7 @@ export default function Home() {
         className={styles.modalWrapper}
         onClick={() => { setIsModalVisible(false) }}>
         <div className={styles.modal}>
-          <img src={modalSrc} alt='test' />
+          <img src={modalSrc} alt={modalAlt} />
         </div>
       </div> : <></>}
 
