@@ -239,7 +239,12 @@ export default function Home() {
       </div> : <></>}
 
       {expansion !== '' ? <>
-        <button onClick={() => { setExpansion('') }}>Back</button>
+        <button onClick={() => {
+          setExpansion('')
+          setCards([{}])
+          setValue(0)
+          setIsLoaded(null)
+        }}>Back</button>
         <h1>{expansion.name}</h1>
         <button onClick={getNumbers}>Open pack</button>
         {isLoaded === false && <p>Loading...</p>}
